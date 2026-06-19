@@ -1,5 +1,6 @@
 // Package middleware contains Gin middleware, including OIDC/JWT
-// authentication against the existing Keycloak setup (see keycloak/ folder).
+// authentication against the existing Keycloak setup (see
+// deployments/keycloak/ folder).
 package middleware
 
 import (

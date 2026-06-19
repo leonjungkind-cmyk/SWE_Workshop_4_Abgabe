@@ -120,5 +120,24 @@ werden).
 - [x] `curl http://localhost:8080/api/public/health` → `200 {"status":"ok"}`
 - [x] `DECISIONS.md`: Abschnitt "Lokale Entwicklung" ergänzt, der erklärt, warum TLS lokal deaktiviert ist und wie es in Produktion wieder aktiviert wird
 
+### Verschiebung nach deployments/ (Go-Standard-Layout)
+- [x] `postgres/` → `deployments/postgres/` verschoben (`git mv`, Inhalt unverändert)
+- [x] `keycloak/` → `deployments/keycloak/` verschoben (`git mv`, Inhalt unverändert)
+- [x] `deployments/keycloak/compose.yml`s `include: ../postgres/compose.yml` geprüft — Pfad bleibt gültig, da beide Ordner gemeinsam als Geschwister unter `deployments/` verschoben wurden; keine Änderung nötig
+- [x] `Makefile` geprüft — enthält keine `docker compose -f`-Befehle, daher keine Anpassung nötig
+- [x] `ReadMe.md`: alle Pfadverweise und `cd postgres`/`cd keycloak`-Anleitungen auf `deployments/postgres/` bzw. `deployments/keycloak/` aktualisiert
+- [x] `.env.example`: alle Kommentar-Pfadverweise auf `deployments/postgres/` bzw. `deployments/keycloak/` aktualisiert
+- [x] `CLAUDE.md`: Pfadverweise aktualisiert
+- [x] `internal/config/config.go`, `internal/database/database.go`, `internal/middleware/auth.go`: Kommentar-Pfadverweise aktualisiert (keine funktionale Änderung)
+- [x] `DECISIONS.md`: Abschnitt "Projektstruktur" überarbeitet — erklärt jetzt, warum `deployments/postgres/` und `deployments/keycloak/` dem Go-Standard-Layout entsprechen
+- [x] `docker compose -f deployments/postgres/compose.yml config` — valide
+- [x] `docker compose -f deployments/keycloak/compose.yml config` — valide, `include`-Pfad löst korrekt auf
+- [x] `go build ./...` — Exit 0 nach der Verschiebung
+- [x] `go test ./...` — Exit 0 nach der Verschiebung
+
+Bewusst nicht geändert: die historischen Protokoll-Einträge weiter oben in
+dieser Datei (z.B. zum `dhi.io`-Registry-Problem), da sie den damals
+tatsächlich gültigen Pfad `postgres/compose.yml` korrekt wiedergeben.
+
 ## Abschlussprüfung
 - [x] Ergebnis gegen die Qualitätskriterien prüfen, bevor an den Nutzer zurückgemeldet wird

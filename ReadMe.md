@@ -34,7 +34,7 @@ noch keine fachlichen Validierungsregeln.
 
 [gorm.io/gorm](https://gorm.io/) mit `gorm.io/driver/postgres`. Verbindung
 zur bestehenden PostgreSQL-Instanz aus
-[postgres/compose.yml](postgres/compose.yml), siehe
+[deployments/postgres/compose.yml](deployments/postgres/compose.yml), siehe
 [internal/database/database.go](internal/database/database.go). Es gibt noch
 keine fachlichen Modelle, Repositories oder Migrationen.
 
@@ -45,9 +45,9 @@ keine fachlichen Modelle, Repositories oder Migrationen.
 [internal/middleware/auth.go](internal/middleware/auth.go) prüft den
 `Authorization: Bearer <token>`-Header gegen den konfigurierten Keycloak-Realm
 und liefert `401` bei fehlendem/ungültigem Token. Nutzt die bestehende
-Keycloak-Infrastruktur aus [keycloak/compose.yml](keycloak/compose.yml); ein
+Keycloak-Infrastruktur aus [deployments/keycloak/compose.yml](deployments/keycloak/compose.yml); ein
 eigener Realm/Client für diese API muss in der Keycloak-Admin-Konsole noch
-angelegt werden (siehe [keycloak/ReadMe.md](keycloak/ReadMe.md)).
+angelegt werden (siehe [deployments/keycloak/ReadMe.md](deployments/keycloak/ReadMe.md)).
 
 ### Einfacher Integrationstest
 
@@ -60,8 +60,8 @@ Docker oder Datenbank.
 
 Dieser Abschnitt beschreibt das technische Setup des Go-Backends, das auf der
 bestehenden PostgreSQL- und Keycloak-Infrastruktur aus früheren Abgaben
-aufbaut (Ordner [postgres/](postgres/) und [keycloak/](keycloak/), unverändert
-übernommen).
+aufbaut (Ordner [deployments/postgres/](deployments/postgres/) und
+[deployments/keycloak/](deployments/keycloak/), unverändert übernommen).
 
 ### Tech-Stack
 
@@ -79,20 +79,20 @@ Begründung der Auswahl: siehe [DECISIONS.md](DECISIONS.md).
 
 ### Bestehendes PostgreSQL-Setup
 
-[postgres/compose.yml](postgres/compose.yml) startet PostgreSQL 18 mit TLS
+[deployments/postgres/compose.yml](deployments/postgres/compose.yml) startet PostgreSQL 18 mit TLS
 (`ssl=on`) auf Host-Port `5432`. Das Superuser-Passwort steht in
-`postgres/password.txt` (Docker Secret), unverändert aus der Vorabgabe.
-`postgres/init/kunde/sql/` zeigt beispielhaft, wie eine eigene Datenbank,
+`deployments/postgres/password.txt` (Docker Secret), unverändert aus der Vorabgabe.
+`deployments/postgres/init/kunde/sql/` zeigt beispielhaft, wie eine eigene Datenbank,
 ein Schema und ein DB-User angelegt werden (`create-db.sql`,
 `create-schema.sql`); für diese API muss analog eine eigene DB angelegt
-werden (siehe [postgres/ReadMe.md](postgres/ReadMe.md)).
+werden (siehe [deployments/postgres/ReadMe.md](deployments/postgres/ReadMe.md)).
 
 ### Bestehendes Keycloak-Setup
 
-[keycloak/compose.yml](keycloak/compose.yml) startet Keycloak (inkl. der
+[deployments/keycloak/compose.yml](deployments/keycloak/compose.yml) startet Keycloak (inkl. der
 PostgreSQL-Compose-Datei via `include:`) auf Host-Port `8880` (HTTP) und
 `8843` (HTTPS). Der bisherige Realm `javascript` mit Client
-`javascript-client` (siehe [keycloak/ReadMe.md](keycloak/ReadMe.md)) stammt
+`javascript-client` (siehe [deployments/keycloak/ReadMe.md](deployments/keycloak/ReadMe.md)) stammt
 aus einer anderen Abgabe und wird nicht direkt wiederverwendet — für diese
 API muss ein neuer Realm (z.B. `workshop`) und Client (z.B. `go-rest-api`)
 nach demselben Schema angelegt werden. Laut [Aufgabe.md](Aufgabe.md) ist
@@ -113,14 +113,14 @@ make run
 PostgreSQL lokal starten:
 
 ```shell
-cd postgres
+cd deployments/postgres
 docker compose up
 ```
 
 Keycloak optional zusätzlich starten:
 
 ```shell
-cd keycloak
+cd deployments/keycloak
 docker compose up
 ```
 

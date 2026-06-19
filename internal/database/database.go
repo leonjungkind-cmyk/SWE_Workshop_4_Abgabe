@@ -1,6 +1,6 @@
 // Package database sets up the GORM connection to the existing PostgreSQL
-// instance (see postgres/ folder). It intentionally does not define any
-// business models or run migrations yet.
+// instance (see deployments/postgres/ folder). It intentionally does not
+// define any business models or run migrations yet.
 package database
 
 import (
@@ -14,7 +14,8 @@ import (
 
 // Connect opens a GORM connection to PostgreSQL using the given configuration.
 // sslmode always comes from cfg.SSLMode (DB_SSLMODE) — never hardcoded —
-// because the existing postgres/compose.yml setup runs with TLS ("ssl=on").
+// because the existing deployments/postgres/compose.yml setup runs with
+// TLS ("ssl=on").
 func Connect(cfg config.DatabaseConfig) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s port=%s dbname=%s user=%s password=%s sslmode=%s",

@@ -20,7 +20,7 @@ type ServerConfig struct {
 }
 
 // DatabaseConfig holds PostgreSQL connection settings.
-// These map to the existing PostgreSQL setup in the postgres/ folder.
+// These map to the existing PostgreSQL setup in the deployments/postgres/ folder.
 type DatabaseConfig struct {
 	Host     string
 	Port     string
@@ -31,7 +31,7 @@ type DatabaseConfig struct {
 }
 
 // KeycloakConfig holds OIDC settings for the existing Keycloak setup
-// in the keycloak/ folder.
+// in the deployments/keycloak/ folder.
 type KeycloakConfig struct {
 	IssuerURL    string
 	ClientID     string
@@ -53,8 +53,9 @@ func Load() (*Config, error) {
 			Name:     getEnv("DB_NAME", "app"),
 			User:     getEnv("DB_USER", "app"),
 			Password: getEnv("DB_PASSWORD", ""),
-			// The local postgres:17-alpine substitute in postgres/compose.yml
-			// runs without TLS (see DECISIONS.md "Local Development"), so
+			// The local postgres:17-alpine substitute in
+			// deployments/postgres/compose.yml runs without TLS (see
+			// DECISIONS.md "Local Development"), so
 			// "disable" is the default here. Set DB_SSLMODE=require once the
 			// original dhi.io/postgres image with TLS is back in use.
 			SSLMode: getEnv("DB_SSLMODE", "disable"),

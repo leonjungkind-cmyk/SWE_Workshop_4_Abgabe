@@ -112,7 +112,15 @@ zukünftiger Ablageort für die OpenAPI-Spezifikation der REST-Schnittstelle.
 
 ## Projektstruktur
 
-Die Ordner `postgres/` und `keycloak/` liegen bewusst im Projektstamm,
-da sie aus vorherigen Abgaben übernommen wurden und unverändert
-bleiben müssen. Nach Go-Best-Practices würden sie unter `deployments/`
-liegen. Eine spätere Migration dorthin wäre der nächste saubere Schritt.
+Die Ordner `postgres/` und `keycloak/` liegen unter `deployments/postgres/`
+und `deployments/keycloak/`, gemäß dem üblichen Go-Standard-Layout für
+Infrastruktur- und Deployment-Konfigurationen (Docker-Compose-Dateien,
+TLS-Zertifikate, Init-Skripte) getrennt vom eigentlichen Anwendungscode.
+Die Inhalte beider Ordner wurden dabei unverändert aus den vorherigen
+Abgaben übernommen, nur die Position im Projektbaum hat sich geändert.
+
+`deployments/keycloak/compose.yml` referenziert
+`deployments/postgres/compose.yml` weiterhin über den relativen Pfad
+`../postgres/compose.yml` (per `include:`). Da beide Ordner gemeinsam unter
+`deployments/` verschoben wurden, bleibt diese Geschwister-Beziehung
+unverändert gültig — der Pfad musste nicht angepasst werden.

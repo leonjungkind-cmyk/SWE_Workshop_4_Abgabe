@@ -5,9 +5,9 @@ Leitfaden für KI-unterstützte Arbeit in diesem Repository.
 ## Projektkontext
 
 Eine kleine Go-REST-API für einen Universitäts-Programmierworkshop.
-Greenfield-Go-Backend; `postgres/` und `keycloak/` sind wiederverwendete,
-unveränderte Infrastruktur aus früheren Abgaben — diese nicht löschen,
-ersetzen oder neu erstellen.
+Greenfield-Go-Backend; `deployments/postgres/` und `deployments/keycloak/`
+sind wiederverwendete, unveränderte Infrastruktur aus früheren Abgaben —
+diese nicht löschen, ersetzen oder neu erstellen.
 
 ## Festgelegter Tech-Stack — nicht davon abweichen
 
@@ -33,7 +33,7 @@ Fachlogik, keine Domänenmodelle, kein vollständiges CRUD.
 - Niemals DB-Passwörter, Keycloak-Secrets, Ports oder Tokens hart kodieren —
   alles aus Umgebungsvariablen lesen (siehe `internal/config/`,
   `.env.example`).
-- `postgres/` oder `keycloak/` nicht verändern, außer eine Änderung ist für
+- `deployments/postgres/` oder `deployments/keycloak/` nicht verändern, außer eine Änderung ist für
   den Betrieb des Go-Backends zwingend notwendig — die Änderung vorher
   erklären.
 - Keine Testcontainers verwenden; Integrationstests müssen ohne Docker oder
