@@ -1,3 +1,3 @@
-// Package validation will hold shared validator.v10 helpers used by Gin
-// binding for request validation. No validation rules are defined yet.
+// Package validation holds request DTOs whose struct tags are validated by
+// Gin's binding (go-playground/validator/v10) before reaching a handler.
 package validation

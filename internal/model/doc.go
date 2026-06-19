@@ -1,3 +1,2 @@
-// Package model will hold GORM domain models.
-// No business models are defined yet.
+// Package model holds GORM domain models mapped to existing database tables.
 package model

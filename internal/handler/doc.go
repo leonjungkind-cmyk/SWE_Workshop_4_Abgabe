@@ -1,3 +1,2 @@
-// Package handler will hold Gin HTTP handlers for the REST API.
-// No domain/customer handlers are implemented yet.
+// Package handler holds Gin HTTP handlers for the REST API.
 package handler
