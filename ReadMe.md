@@ -149,3 +149,129 @@ Siehe [.env.example](.env.example) für die vollständige, kommentierte Liste
 hinterlegt; `.env` ist über `.gitignore` ausgeschlossen.
 
 ## Prompts/Requests an KI-Agent/en
+
+Beispiel Prompt:
+dieser wurde nach einer langen Diskussion von Claude erstellt un anschließend in VScode mit Claude verwendet.
+
+## Prompt 1 — Setup & Projektstruktur
+
+Dieser Prompt kommt zuerst, noch bevor irgendeine Zeile Business-Logic geschrieben wird.
+
+```
+CONTEXT:
+Go REST API project for a university workshop. Must be customer-deliverable quality.
+No existing code yet — this is greenfield setup.
+
+TECH STACK (fixed, do not deviate):
+- Language:    Go 1.23+
+- HTTP Router: github.com/gin-gonic/gin
+- ORM:         gorm.io/gorm + gorm.io/driver/postgres
+- Validation:  github.com/go-playground/validator/v10 (via Gin binding)
+- Linter:      github.com/golangci/golangci-lint
+- Formatter:   gofmt (built-in)
+
+TASK:
+Set up the complete project foundation. Create a TODO.md with every 
+setup step, then execute them one by one and check each off.
+
+Run all shell commands yourself:
+- go mod init
+- go get for every dependency above  
+- go mod tidy
+- Install the VS Code Go extension: code --install-extension golang.go
+- Install golangci-lint via the official install script for Linux/macOS
+
+Create:
+- Project folder structure (follow standard Go project layout)
+- Makefile with targets: build, lint, test, run
+- .golangci.yml configured for: errcheck, gofmt, goimports, govet, staticcheck
+- .env.example with all required environment variables
+- DECISIONS.md explaining why each tool in the tech stack was chosen
+- README.md skeleton with all required sections pre-filled where possible
+
+DONE looks like:
+- `make build` exits 0
+- `make lint` exits 0 with zero warnings
+- All files are committed with a meaningful initial commit message
+- DECISIONS.md and README.md exist and are not empty
+
+Do not write any business logic or handlers yet. Setup only.
+```
+
+---
+
+## Prompt 2 — Datenbankanbindung
+
+Kommt direkt nach Prompt 1, nachdem die Struktur steht.
+
+```
+CONTEXT:
+Project setup is complete. Now connect to the existing PostgreSQL database.
+The DB schema already exists — do not run migrations that create new tables.
+Connection string comes from the DATABASE_URL environment variable.
+
+TASK:
+- Configure GORM to connect to PostgreSQL using DATABASE_URL from .env
+- Implement connection pooling with sensible defaults
+- Introspect the existing DB schema and create matching GORM model structs
+- Add a startup health check that verifies the DB connection on launch
+- If DATABASE_URL is missing or the connection fails, exit with a clear error message
+
+DONE looks like:
+- `make run` starts without errors when DATABASE_URL is set
+- `make run` exits with a descriptive error when DATABASE_URL is missing
+- All models reflect the actual existing DB tables
+```
+
+---
+
+## Prompt 3 — REST Endpoints
+
+```
+CONTEXT:
+DB connection and models are working.
+Now implement the REST API layer.
+
+TASK:
+For each model from the existing DB, implement:
+- GET  /[resource]      → list all records
+- GET  /[resource]/:id  → get single record  
+- POST /[resource]      → create new record with full input validation
+
+All POST endpoints must validate input using Gin binding struct tags.
+Return consistent JSON error responses for validation failures and not-found cases.
+
+DONE looks like:
+- `make run` serves all endpoints
+- POST with missing required fields returns 400 with a readable error body
+- GET /[resource]/999999 returns 404, not a 500
+- `make lint` still exits 0
+```
+
+---
+
+## Prompt 4 — Tests & Abgabe
+
+```
+CONTEXT:
+REST API is working. Final step before submission.
+
+TASK:
+- Write one integration test per endpoint using net/http/httptest
+- Tests must not require a real DB — use a mock or in-memory approach
+- Run all tests and fix anything that fails
+- Fill out README.md completely with: names, Git repo URL, 
+  all AI tools used, all frameworks/libraries with versions,
+  and the prompts that were used in this session
+- Final check: make build, make lint, make test all exit 0
+
+DONE looks like:
+- `make test` is green
+- README.md has no empty sections
+- The repo is in a state that can be zipped and handed to a customer
+```
+
+---
+
+Die Aufteilung hat einen klaren Grund: jeder Prompt hat ein abgeschlossenes, verifizierbares Ergebnis bevor der nächste startet. Dadurch bleibt der Context von Claude Code sauber und ihr merkt sofort wenn ein Schritt nicht funktioniert hat.
+
