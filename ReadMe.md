@@ -21,7 +21,7 @@ ChatGPT-5.5
 
 ### Chat-URLs, z.B. https://chatgpt.com
 
--
+-https://chatgpt.com/c/6a353128-a740-83eb-a895-5ca55d6e9865
 
 ## Frameworks und Bibliotheken
 
@@ -77,89 +77,6 @@ siehe [tests/health_test.go](tests/health_test.go). Ruft die
 Public-Health-Route direkt über den Gin-Router auf, ohne echten HTTP-Server,
 Docker oder Datenbank.
 
-## Projekt-Setup (Go-Backend-Grundgerüst)
-
-Dieser Abschnitt beschreibt das technische Setup des Go-Backends, das auf der
-bestehenden PostgreSQL- und Keycloak-Infrastruktur aus früheren Abgaben
-aufbaut (Ordner [deployments/postgres/](deployments/postgres/) und
-[deployments/keycloak/](deployments/keycloak/), unverändert übernommen).
-
-### Tech-Stack
-
-| Bereich          | Bibliothek |
-|-------------------|------------|
-| Sprache           | Go 1.23+ |
-| REST-Framework    | gin-gonic/gin |
-| ORM               | gorm.io/gorm + gorm.io/driver/postgres |
-| Validierung       | go-playground/validator/v10 |
-| Security (OIDC)   | coreos/go-oidc/v3 + golang.org/x/oauth2 |
-| Tests             | net/http/httptest + testify |
-| Linting           | golangci-lint, gofmt, goimports |
-
-Begründung der Auswahl: siehe [DECISIONS.md](DECISIONS.md).
-
-### Bestehendes PostgreSQL-Setup
-
-[deployments/postgres/compose.yml](deployments/postgres/compose.yml) startet PostgreSQL 18 mit TLS
-(`ssl=on`) auf Host-Port `5432`. Das Superuser-Passwort steht in
-`deployments/postgres/password.txt` (Docker Secret), unverändert aus der Vorabgabe.
-`deployments/postgres/init/kunde/sql/` zeigt beispielhaft, wie eine eigene Datenbank,
-ein Schema und ein DB-User angelegt werden (`create-db.sql`,
-`create-schema.sql`); für diese API muss analog eine eigene DB angelegt
-werden (siehe [deployments/postgres/ReadMe.md](deployments/postgres/ReadMe.md)).
-
-### Bestehendes Keycloak-Setup
-
-[deployments/keycloak/compose.yml](deployments/keycloak/compose.yml) startet Keycloak (inkl. der
-PostgreSQL-Compose-Datei via `include:`) auf Host-Port `8880` (HTTP) und
-`8843` (HTTPS). Der bisherige Realm `javascript` mit Client
-`javascript-client` (siehe [deployments/keycloak/ReadMe.md](deployments/keycloak/ReadMe.md)) stammt
-aus einer anderen Abgabe und wird nicht direkt wiederverwendet — für diese
-API muss ein neuer Realm (z.B. `workshop`) und Client (z.B. `go-rest-api`)
-nach demselben Schema angelegt werden. Laut [Aufgabe.md](Aufgabe.md) ist
-Keycloak optional: ist der OIDC-Provider beim Start nicht erreichbar, startet
-der Server trotzdem; `/api/secured` liefert dann für jede Anfrage `401`.
-
-### Wie starten
-
-```shell
-cp .env.example .env
-# .env mit echten lokalen Werten befüllen
-
-go mod tidy
-make run
-# alternativ: go run ./cmd/api
-```
-
-PostgreSQL lokal starten:
-
-```shell
-cd deployments/postgres
-docker compose up
-```
-
-Keycloak optional zusätzlich starten:
-
-```shell
-cd deployments/keycloak
-docker compose up
-```
-
-### Wie testen
-
-```shell
-make test
-# alternativ: go test ./... -v
-```
-
-Der enthaltene Test benötigt kein Docker, keine echte Datenbank und kein
-Keycloak.
-
-### Umgebungsvariablen
-
-Siehe [.env.example](.env.example) für die vollständige, kommentierte Liste
-(Server-, DB- und Keycloak-Variablen). Es sind keine Secrets im Repository
-hinterlegt; `.env` ist über `.gitignore` ausgeschlossen.
 
 ## Prompts/Requests an KI-Agent/en
 
@@ -288,3 +205,4 @@ DONE looks like:
 
 Die Aufteilung hat einen klaren Grund: jeder Prompt hat ein abgeschlossenes, verifizierbares Ergebnis bevor der nächste startet. Dadurch bleibt der Context von Claude Code sauber und ihr merkt sofort wenn ein Schritt nicht funktioniert hat.
 
+## Prompt von ChatGPT sind in promps_Bastian_Knebel
