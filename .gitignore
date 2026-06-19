@@ -1,0 +1,11 @@
+.claude/settings.json
+
+# Go
+/bin/
+*.exe
+*.test
+*.out
+
+# Local environment
+.env
+
