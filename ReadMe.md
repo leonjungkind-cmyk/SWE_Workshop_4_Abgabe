@@ -7,11 +7,19 @@ Leon Jungkind
 
 ## Link zum Git-Repository
 
+https://github.com/leonjungkind-cmyk/SWE_Workshop_4_Abgabe
+
 ## KI-Werkzeuge
+
+Claude Sonnet 4.6
+Claude integriert in VS code
+ChatGPT-5.5
 
 ### Agenten
 
 ### Chat-URLs, z.B. https://chatgpt.com
+
+-
 
 ## Frameworks und Bibliotheken
 

@@ -28,4 +28,4 @@ CREATE DATABASE kunde;
 GRANT ALL ON DATABASE kunde TO kunde;
 
 -- https://www.postgresql.org/docs/current/sql-createtablespace.html
-CREATE TABLESPACE kundespace OWNER kunde LOCATION '/tablespace/kunde';
+CREATE TABLESPACE kundespace OWNER kunde LOCATION '/tablespace/kundespace';

@@ -30,3 +30,23 @@ CREATE TABLE IF NOT EXISTS kunde
     username VARCHAR(40)    NOT NULL UNIQUE,
     version  INTEGER        NOT NULL DEFAULT 0
 ) TABLESPACE kundespace;
+
+CREATE TABLE IF NOT EXISTS adresse
+(
+    id         BIGINT GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
+    strasse    VARCHAR(80) NOT NULL,
+    hausnummer VARCHAR(10) NOT NULL,
+    plz        VARCHAR(10) NOT NULL,
+    ort        VARCHAR(40) NOT NULL,
+    kunde_id   BIGINT      NOT NULL UNIQUE,
+    CONSTRAINT adresse_kunde_fk FOREIGN KEY (kunde_id) REFERENCES kunde (id) ON DELETE CASCADE
+) TABLESPACE kundespace;
+
+CREATE TABLE IF NOT EXISTS bestellung
+(
+    id          BIGINT GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
+    produktname VARCHAR(80) NOT NULL,
+    menge       INTEGER     NOT NULL CHECK (menge > 0),
+    kunde_id    BIGINT      NOT NULL,
+    CONSTRAINT bestellung_kunde_fk FOREIGN KEY (kunde_id) REFERENCES kunde (id) ON DELETE CASCADE
+) TABLESPACE kundespace;
