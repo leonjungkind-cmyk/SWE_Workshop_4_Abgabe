@@ -9,7 +9,7 @@ type Kunde struct {
 	Username string `gorm:"column:username;size:40;not null;unique" json:"username"`
 	Version  int    `gorm:"column:version;not null;default:0" json:"version"`
 
-	Adresse     *Adresse     `gorm:"foreignKey:KundeID;references:ID" json:"adresse,omitempty"`
+	Adresse      *Adresse     `gorm:"foreignKey:KundeID;references:ID" json:"adresse,omitempty"`
 	Bestellungen []Bestellung `gorm:"foreignKey:KundeID;references:ID" json:"bestellungen,omitempty"`
 }
 
