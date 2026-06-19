@@ -17,11 +17,24 @@ ChatGPT-5.5
 
 ### Agenten
 
+-
+
 ### Chat-URLs, z.B. https://chatgpt.com
 
 -
 
 ## Frameworks und Bibliotheken
+
+| Bereich | Entscheidung | Warum diese Wahl? |
+|---|---|---|
+| HTTP-Framework | Gin | Sehr verbreitet, übersichtliches Routing, gute REST-Unterstützung |
+| Datenbankzugriff | GORM | Weniger Boilerplate, schnelle CRUD-Umsetzung, hohe Verbreitung |
+| Datenbanktreiber | GORM PostgreSQL Driver | Passt direkt zu GORM und zur vorgegebenen PostgreSQL-Datenbank |
+| Validierung | go-playground/validator/v10 | Gute Gin-Integration, Validierung direkt über Struct-Tags |
+| Dependency Management | Go Modules | Offizieller Standard in Go, keine Zusatzinstallation nötig |
+| Formatierung | gofmt | Einheitlicher Go-Code ohne eigene Style-Diskussionen |
+| Linting | golangci-lint | Viele Go-Linter in einem Tool, gut für Teamarbeit und CI/CD |
+| Lokales Setup | Docker Compose | Einheitliche lokale Umgebung für benötigte Dienste |
 
 ### REST-Schnittstelle (Lesen und Neuanlegen)
 
