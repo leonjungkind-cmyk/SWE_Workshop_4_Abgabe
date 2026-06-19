@@ -1,0 +1,138 @@
+{
+  "info": {
+    "name": "SWE Workshop Go REST API",
+    "_postman_id": "b1b0a5f0-7f1f-4e6c-9d55-0b6f2e1f4a10",
+    "description": "Postman Collection für das Go REST API Workshop-Projekt. Enthält öffentliche GET-Endpunkte und einen geschützten POST-Endpunkt mit Bearer Token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "kundeId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/public/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "health"
+              ]
+            },
+            "description": "Prüft, ob der Go-Server erreichbar ist."
+          },
+          "response": []
+        },
+        {
+          "name": "Alle Kunden abrufen",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/public/kunden",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "kunden"
+              ]
+            },
+            "description": "Ruft alle Kunden aus der PostgreSQL-Datenbank ab."
+          },
+          "response": []
+        },
+        {
+          "name": "Kunde nach ID abrufen",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/public/kunden/{{kundeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "kunden",
+                "{{kundeId}}"
+              ]
+            },
+            "description": "Ruft einen einzelnen Kunden anhand der ID ab."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Secured",
+      "item": [
+        {
+          "name": "Kunde anlegen",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nachname\": \"Testkunde\",\n  \"email\": \"testkunde@example.de\",\n  \"username\": \"testkunde\",\n  \"adresse\": {\n    \"strasse\": \"Hauptstraße\",\n    \"hausnummer\": \"12a\",\n    \"plz\": \"76133\",\n    \"ort\": \"Karlsruhe\"\n  },\n  \"bestellungen\": [\n    {\n      \"produktname\": \"Laptop\",\n      \"menge\": 1\n    },\n    {\n      \"produktname\": \"Maus\",\n      \"menge\": 2\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/secured/kunden",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "secured",
+                "kunden"
+              ]
+            },
+            "description": "Legt einen neuen Kunden an. Dieser Endpunkt ist geschützt und benötigt einen gültigen Keycloak Access Token."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
