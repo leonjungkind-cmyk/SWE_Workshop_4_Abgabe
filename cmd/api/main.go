@@ -23,6 +23,7 @@ func main() {
 
 	addr := cfg.Server.Host + ":" + cfg.Server.Port
 	log.Printf("starting server on %s", addr)
+
 	if err := router.Run(addr); err != nil {
 		log.Fatalf("server stopped: %v", err)
 	}

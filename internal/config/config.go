@@ -3,7 +3,11 @@
 // with sensible local-development defaults for non-secret settings only.
 package config
 
-import "os"
+import (
+	"os"
+
+	"github.com/joho/godotenv"
+)
 
 // Config bundles all configuration groups needed by the application.
 type Config struct {
@@ -41,6 +45,10 @@ type KeycloakConfig struct {
 // Load reads configuration from environment variables.
 // See .env.example for the full list of supported variables and defaults.
 func Load() (*Config, error) {
+	// Load values from .env into the process environment.
+	// If .env does not exist, the application still works with real environment variables.
+	_ = godotenv.Load()
+
 	cfg := &Config{
 		Server: ServerConfig{
 			Env:  getEnv("APP_ENV", "development"),
@@ -50,19 +58,14 @@ func Load() (*Config, error) {
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),
 			Port:     getEnv("DB_PORT", "5432"),
-			Name:     getEnv("DB_NAME", "app"),
-			User:     getEnv("DB_USER", "app"),
-			Password: getEnv("DB_PASSWORD", ""),
-			// The local postgres:17-alpine substitute in
-			// deployments/postgres/compose.yml runs without TLS (see
-			// DECISIONS.md "Local Development"), so
-			// "disable" is the default here. Set DB_SSLMODE=require once the
-			// original dhi.io/postgres image with TLS is back in use.
-			SSLMode: getEnv("DB_SSLMODE", "disable"),
+			Name:     getEnv("DB_NAME", "kunde"),
+			User:     getEnv("DB_USER", "kunde"),
+			Password: getEnv("DB_PASSWORD", "p"),
+			SSLMode:  getEnv("DB_SSLMODE", "disable"),
 		},
 		Keycloak: KeycloakConfig{
-			IssuerURL:    getEnv("KEYCLOAK_ISSUER_URL", "http://localhost:8880/realms/workshop"),
-			ClientID:     getEnv("KEYCLOAK_CLIENT_ID", "go-rest-api"),
+			IssuerURL:    getEnv("KEYCLOAK_ISSUER_URL", "http://localhost:8880/realms/javascript"),
+			ClientID:     getEnv("KEYCLOAK_CLIENT_ID", "javascript-client"),
 			RequiredRole: getEnv("KEYCLOAK_REQUIRED_ROLE", ""),
 		},
 	}
