@@ -22,7 +22,7 @@
 services:
   db:
     # https://github.com/docker-library/postgres/blob/master/18/trixie/Dockerfile
-    image: dhi.io/postgres:18.3-debian13
+    image: postgres:17-alpine
     ports:
       - published: 5432
         target: 5432
@@ -33,7 +33,12 @@ services:
     # ggf. "-c shared_buffers=64MB" statt 128 MB (default bei PostgreSQL 18)
     # ggf. "-c timezone='Europe/Berlin'" (default bei PostgreSQL 18)
     # ggf. "-c max_connections=10" statt 100
-    command: ["-c", "ssl=on"]
+    # TLS disabled for the local postgres:17-alpine substitute: this image's
+    # default data dir (/var/lib/postgresql/data) doesn't match the volume
+    # mount below (.../18/data, made for the original dhi.io image), so the
+    # TLS certs from postgres/init/tls never land where Postgres expects them
+    # and "ssl=on" crash-loops with "could not load server certificate file".
+    #command: ["-c", "ssl=on"]
     volumes:
       - pg_data:/var/lib/postgresql/18/data
       - pg_tablespace:/tablespace
