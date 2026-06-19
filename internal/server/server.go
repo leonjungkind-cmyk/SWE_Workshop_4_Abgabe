@@ -10,7 +10,9 @@ import (
 	"gorm.io/gorm"
 
 	"swe-workshop-api/internal/config"
+	"swe-workshop-api/internal/handler"
 	"swe-workshop-api/internal/middleware"
+	"swe-workshop-api/internal/repository"
 )
 
 // NewRouter builds the Gin engine with public and secured route groups.
@@ -41,12 +43,17 @@ func NewRouter(cfg *config.Config, db *gorm.DB) *gin.Engine {
 	return router
 }
 
-func registerPublicRoutes(group *gin.RouterGroup, _ *gorm.DB) {
+func registerPublicRoutes(group *gin.RouterGroup, db *gorm.DB) {
 	group.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
+
+	kundeHandler := handler.NewKundeHandler(repository.NewKundeRepository(db))
+	group.GET("/kunden", kundeHandler.GetAll)
+	group.GET("/kunden/:id", kundeHandler.GetByID)
 }
 
-func registerSecuredRoutes(_ *gin.RouterGroup, _ *gorm.DB) {
-	// Placeholder: protected handlers will be added in a later workshop step.
+func registerSecuredRoutes(group *gin.RouterGroup, db *gorm.DB) {
+	kundeHandler := handler.NewKundeHandler(repository.NewKundeRepository(db))
+	group.POST("/kunden", kundeHandler.Create)
 }
