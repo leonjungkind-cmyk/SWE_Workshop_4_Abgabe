@@ -68,7 +68,7 @@ func TestCreateKundeValidBody(t *testing.T) {
 	repo := &fakeKundeRepository{}
 	router := newKundeTestRouter(repo)
 
-	body := []byte(`{"nachname":"Schmidt","email":"schmidt@example.de","username":"schmidt"}`)
+	body := []byte(`{"nachname":"Schmidt","email":"schmidt@example.de","username":"schmidt","adresse":{"strasse":"Hauptstrasse","hausnummer":"1","plz":"76133","ort":"Karlsruhe"}}`)
 	req := httptest.NewRequest(http.MethodPost, "/api/secured/kunden", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	recorder := httptest.NewRecorder()
