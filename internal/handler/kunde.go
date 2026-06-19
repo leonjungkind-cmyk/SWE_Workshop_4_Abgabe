@@ -21,14 +21,14 @@ func NewKundeHandler(repo repository.KundeRepository) *KundeHandler {
 	return &KundeHandler{repo: repo}
 }
 
-// GetAll handles GET /api/public/kunden and returns every Kunde as a JSON
-// array.
+// GetAll handles GET /api/public/kunden and returns every Kunde as a JSON array.
 func (h *KundeHandler) GetAll(c *gin.Context) {
 	kunden, err := h.repo.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to load kunden"})
 		return
 	}
+
 	c.JSON(http.StatusOK, kunden)
 }
 
@@ -45,15 +45,18 @@ func (h *KundeHandler) GetByID(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to load kunde"})
 		return
 	}
+
 	if !found {
 		c.JSON(http.StatusNotFound, gin.H{"error": "kunde not found"})
 		return
 	}
+
 	c.JSON(http.StatusOK, kunde)
 }
 
-// Create handles POST /api/secured/kunden. It validates the request body via
-// Gin binding, then persists a new Kunde with a database-assigned ID.
+// Create handles POST /api/secured/kunden.
+// It validates the request body via Gin binding and then creates a new Kunde
+// including Adresse and optional Bestellungen.
 func (h *KundeHandler) Create(c *gin.Context) {
 	var req validation.KundeCreateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -61,14 +64,31 @@ func (h *KundeHandler) Create(c *gin.Context) {
 		return
 	}
 
+	bestellungen := make([]model.Bestellung, 0, len(req.Bestellungen))
+	for _, bestellungReq := range req.Bestellungen {
+		bestellungen = append(bestellungen, model.Bestellung{
+			Produktname: bestellungReq.Produktname,
+			Menge:       bestellungReq.Menge,
+		})
+	}
+
 	kunde := model.Kunde{
 		Nachname: req.Nachname,
 		Email:    req.Email,
 		Username: req.Username,
+		Adresse: &model.Adresse{
+			Strasse:    req.Adresse.Strasse,
+			Hausnummer: req.Adresse.Hausnummer,
+			PLZ:        req.Adresse.PLZ,
+			Ort:        req.Adresse.Ort,
+		},
+		Bestellungen: bestellungen,
 	}
+
 	if err := h.repo.Create(&kunde); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create kunde"})
 		return
 	}
+
 	c.JSON(http.StatusCreated, kunde)
 }
