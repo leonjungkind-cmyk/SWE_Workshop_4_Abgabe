@@ -9,3 +9,4 @@
 # Local environment
 .env
 
+api-server.cmd.log
