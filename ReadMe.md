@@ -19,6 +19,8 @@ ChatGPT-5.5
 
 ### Chat-URLs, z.B. https://chatgpt.com
 
+-
+
 ## Frameworks und Bibliotheken
 
 ### REST-Schnittstelle (Lesen und Neuanlegen)
