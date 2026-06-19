@@ -40,9 +40,9 @@ services:
     # and "ssl=on" crash-loops with "could not load server certificate file".
     #command: ["-c", "ssl=on"]
     volumes:
-      - pg_data:/var/lib/postgresql/18/data
+      - pg_data:/var/lib/postgresql/data
       - pg_tablespace:/tablespace
-      - pg_init:/init:ro
+      - ./init:/init:ro
       # UNIX-Socket .s.PGSQL.5432.lock
       #- pg_run:/tmp
     # https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables
@@ -89,14 +89,9 @@ secrets:
 
 volumes:
   pg_data:
-    name: pg_data
-    external: true
+    name: pg_data17
   pg_tablespace:
-    name: pg_tablespace
-    external: true
-  pg_init:
-    name: pg_init
-    external: true
+    name: pg_tablespace17
 
 networks:
   acme-network:
