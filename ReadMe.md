@@ -80,6 +80,10 @@ Docker oder Datenbank.
 
 ## Prompts/Requests an KI-Agent/en
 
+Tipps wie man Tokensparender Arbeitet:
+
+https://www.youtube.com/watch?v=2f7ZkImNHFo
+
 Beispiel Prompt:
 dieser wurde nach einer langen Diskussion von Claude erstellt un anschließend in VScode mit Claude verwendet.
 
